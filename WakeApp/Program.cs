@@ -9,6 +9,12 @@ namespace WakeApp
 {
     internal class Program
     {
+        public int arrivalTime;     // Ankunftszeit
+        public int routeDuration;   // Fahrtwegdauer
+        public int getReadyTime;    // Fertigmachzeit
+        public int otherDelays;     // andere Verzögerungen
+        public bool bufferTime;     // Pufferzeit - zum Ausgleich von möglichen Stau's oder Zugverspätungen
+
         static void Main(string[] args)
         {
             #region WakeApp-Infos
@@ -35,6 +41,16 @@ namespace WakeApp
             ///</summary>
             #endregion
 
+            // Console Settings
+            Title = "WakeApp";
+            SetWindowSize(110, 25);
+            SetBufferSize(110, 25);
+
+            // User Interface
+            UserInterface UI = new UserInterface();
+            UI.Display();
+
+            ReadKey();
         }
     }
 }
