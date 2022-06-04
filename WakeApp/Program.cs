@@ -9,11 +9,17 @@ namespace WakeApp
 {
     internal class Program
     {
-        public int arrivalTime;     // Ankunftszeit
-        public int routeDuration;   // Fahrtwegdauer
-        public int getReadyTime;    // Fertigmachzeit
-        public int otherDelays;     // andere Verzögerungen
-        public bool bufferTime;     // Pufferzeit - zum Ausgleich von möglichen Stau's oder Zugverspätungen
+        // Program settings
+        public static bool configExists = false;
+        public static bool valuesInConfig = false;
+        public static bool setAlarmClock = true;
+
+        // Alarm clock settings
+        public static string arrivalTime;   // Ankunftszeit
+        public static string routeDuration; // Fahrtwegdauer
+        public static string getReadyTime;  // Fertigmachzeit
+        public static string otherDelays;   // andere Verzögerungen
+        public static string bufferTime;    // Pufferzeit - zum Ausgleich von möglichen Stau's oder Zugverspätungen
 
         static void Main(string[] args)
         {
@@ -43,12 +49,25 @@ namespace WakeApp
 
             // Console Settings
             Title = "WakeApp";
-            SetWindowSize(110, 25);
-            SetBufferSize(110, 25);
+            CursorVisible = false;
+            SetWindowSize(57, 30);
+            SetBufferSize(57, 30);
 
-            // User Interface
-            UserInterface UI = new UserInterface();
-            UI.Display();
+            // XmlHandler
+            XmlConfig Config = new XmlConfig();
+            Config.Check();
+            if (configExists)
+            {
+                Config.Load();
+            }
+
+            // Alarm Clock
+            AlarmClock AlarmClock = new AlarmClock();
+            do
+            {
+                setAlarmClock = AlarmClock.Run();
+            }
+            while (setAlarmClock);
 
             ReadKey();
         }
