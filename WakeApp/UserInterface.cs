@@ -11,60 +11,20 @@ namespace WakeApp
     {
         public void Display()
         {
-            Border();
-            Header();
-            Clock();
+            HeaderV2();
+
+            //Clock();
         }
 
-        private void Border()
+        private void HeaderV2()
         {
-            // │ ┤ ┼ ├ ┐ ┌ └ ┘ ┴ ┬ ─
-            // ║ ╣ ╬ ╠ ╗ ╔ ╝ ╚ ╩ ╦ ═
-
-            string border = "\n   ╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗" + "\n" +
-                            "   ║                                                                                                        ║" + "\n" +
-                            "   ║                                                                                                        ║" + "\n" +
-                            "   ║                                                                                                        ║" + "\n" +
-                            "   ║                                                                                                        ║" + "\n" +
-                            "   ║                                                                                                        ║" + "\n" +
-                            "   ║                                                                                                        ║" + "\n" +
-                            "   ╠══════════════════════════════════════════════════════════════════════════════╦═════════════════════════╣" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ║                                                                              ║                         ║" + "\n" +
-                            "   ╚══════════════════════════════════════════════════════════════════════════════╩═════════════════════════╝";
-            ForegroundColor = ConsoleColor.DarkGray;
-            WriteLine(border);
-            ForegroundColor = ConsoleColor.White;
-        }
-
-        private void Header()
-        {
-            ForegroundColor = ConsoleColor.Cyan;
-            SetCursorPosition(28, 2);
-            Write(",--.   ,--.        ,--.            ,---.");
-            SetCursorPosition(28, 3);
-            Write("|  |   |  | ,--,--.|  |,-. ,---.  /  O  \\  ,---.  ,---.");
-            SetCursorPosition(28, 4);
-            Write("|  |.'.|  |' ,-.  ||     /| .-. :|  .-.  || .-. || .-. |");
-            SetCursorPosition(28, 5);
-            Write("|   ,'.   |\\ '-'  ||  \\  \\|   --.|  | |  || '-' /| '-' /");
-            SetCursorPosition(28, 6);
-            Write("'--'   '--' `--`--'`--'`--'`----'`--' `--'|  |-' |  |-'");
-            SetCursorPosition(28, 7);
-            Write("                                          `--'   `--'");
-            ForegroundColor = ConsoleColor.White;
+            string header = @"    __        __      _             _" + Environment.NewLine +
+                            @"    \ \      / /__ _ | | __ ___    / \    _ __   _ __  " + Environment.NewLine +
+                            @"     \ \ /\ / // _` || |/ // _ \  / _ \  | '_ \ | '_ \ " + Environment.NewLine +
+                            @"      \ V  V /| (_| ||   <|  __/ / ___ \ | |_) || |_) |" + Environment.NewLine +
+                            @"       \_/\_/  \__,_||_|\_\\___|/_/   \_\| .__/ | .__/ " + Environment.NewLine +
+                            @"    ─────────────────────────────────────|_|────|_|────";
+            Write(header);
         }
 
         private void Clock()
@@ -95,7 +55,6 @@ namespace WakeApp
             Write("    /'-._____.-'\\");
             SetCursorPosition(85, 21);
             Write("    '--'     '--'");
-
         }
     }
 }
