@@ -12,7 +12,6 @@ namespace WakeApp
         // Program settings
         public static bool configExists = false;
         public static bool valuesInConfig = false;
-        public static bool setAlarmClock = true;
 
         // Alarm clock settings
         public static string arrivalTime;   // Ankunftszeit
@@ -63,11 +62,7 @@ namespace WakeApp
 
             // Alarm Clock
             AlarmClock AlarmClock = new AlarmClock();
-            do
-            {
-                setAlarmClock = AlarmClock.Run();
-            }
-            while (setAlarmClock);
+            AlarmClock.Run();
 
             ReadKey();
         }

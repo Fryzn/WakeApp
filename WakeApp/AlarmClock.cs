@@ -9,21 +9,24 @@ namespace WakeApp
 {
     internal class AlarmClock : Program
     {
+        private bool newAlarmClock = false;
+        private bool runAlarmClock = true;
+
         private int userIndex;
         private string userInput;
         private int currentLeftPos;
         private int currentTopPos;
         private DateTime alarmTime;
 
-        public bool Run()
+        private double convertedTime;
+
+        public void Run()
         {
             ForegroundColor = ConsoleColor.White;
-
             // User Interface
             UserInterface UI = new UserInterface();
             UI.Display();
 
-            bool newAlarmClock = false;
             if (valuesInConfig)
             {
                 SetCursorPosition(4, 7);
@@ -153,12 +156,19 @@ namespace WakeApp
                     // Xml Handler
                     XmlConfig Config = new XmlConfig();
                     Config.Save();
+
+                    System.Threading.Thread.Sleep(2000);
                 }
 
+                convertedTime = Convert.ToInt32(routeDuration) + Convert.ToInt32(getReadyTime) + Convert.ToInt32(otherDelays) + Convert.ToInt32(bufferTime);
+                alarmTime = DateTime.Parse(arrivalTime);
+                alarmTime = alarmTime.AddMinutes(-convertedTime);
 
+                SetCursorPosition(4, CursorTop + 1);
+                Write(alarmTime.ToString());
+                ReadKey();
             }
-            while (setAlarmClock);
-            return false;
+            while (runAlarmClock);
         }
 
         private bool SetArrivalTime()
@@ -204,7 +214,6 @@ namespace WakeApp
 
                 CursorVisible = false;
                 arrivalTime = userInput;
-                alarmTime = DateTime.Parse(userInput);
                 return true;
             }
             catch
@@ -266,15 +275,12 @@ namespace WakeApp
                 {
                     case 1:
                         routeDuration = userInput;
-                        alarmTime.AddMinutes(-Convert.ToInt32(routeDuration));
                         break;
                     case 2:
                         getReadyTime = userInput;
-                        alarmTime.AddMinutes(-Convert.ToInt32(getReadyTime));
                         break;
                     case 3:
                         otherDelays = userInput;
-                        alarmTime.AddMinutes(-Convert.ToInt32(otherDelays));
                         break;
                 }
                 return true;
@@ -347,15 +353,12 @@ namespace WakeApp
             {
                 case 0:
                     bufferTime = "5";
-                    alarmTime.AddMinutes(-Convert.ToInt32(bufferTime));
                     break;
                 case 1:
                     bufferTime = "10";
-                    alarmTime.AddMinutes(-Convert.ToInt32(bufferTime));
                     break;
                 case 2:
                     bufferTime = "0";
-                    alarmTime.AddMinutes(-Convert.ToInt32(bufferTime));
                     break;
             }
             return true;
