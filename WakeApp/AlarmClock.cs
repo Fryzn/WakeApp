@@ -19,6 +19,7 @@ namespace WakeApp
         private DateTime alarmTime;
 
         private double convertedTime;
+        private int result;
 
         public void Run()
         {
@@ -160,13 +161,100 @@ namespace WakeApp
                     System.Threading.Thread.Sleep(2000);
                 }
 
+                Clear();
+                UI.Display();
+
+                // Check if alarm clock is for the next day
                 convertedTime = Convert.ToInt32(routeDuration) + Convert.ToInt32(getReadyTime) + Convert.ToInt32(otherDelays) + Convert.ToInt32(bufferTime);
                 alarmTime = DateTime.Parse(arrivalTime);
                 alarmTime = alarmTime.AddMinutes(-convertedTime);
+                result = DateTime.Compare(alarmTime, DateTime.Now);
+                if (result <= 0)
+                {
+                    alarmTime = alarmTime.AddDays(1);
+                }
+                SetCursorPosition(4, 7);
+                Write($"»Der Wecker wurde auf {alarmTime.ToString("dd.MM.yyyy HH:mm:ss")} gesetzt.\n" +
+                    $"     Wecker klingelt in:\n" +
+                    $"\n" +
+                    $"                     »             «");
 
-                SetCursorPosition(4, CursorTop + 1);
-                Write(alarmTime.ToString());
-                ReadKey();
+                // Check how much time is left 
+                TimeSpan timeLeft;
+                TimeSpan timeNull = new TimeSpan(0, 0, 0);
+                ConsoleKey keyPressed;
+                userIndex = 0;
+                do
+                {
+                    timeLeft = alarmTime - DateTime.Now;
+                    SetCursorPosition((WindowWidth / 2) - (timeLeft.ToString(@"dd\:hh\:mm\:ss").Length / 2), 10);
+                    ForegroundColor = ConsoleColor.Cyan;
+                    Write(timeLeft.ToString(@"dd"));
+                    ForegroundColor = ConsoleColor.White;
+                    Write(":");
+                    ForegroundColor = ConsoleColor.Cyan;
+                    Write(timeLeft.ToString(@"hh"));
+                    ForegroundColor = ConsoleColor.White;
+                    Write(":");
+                    ForegroundColor = ConsoleColor.Cyan;
+                    Write(timeLeft.ToString(@"mm"));
+                    ForegroundColor = ConsoleColor.White;
+                    Write(":");
+                    ForegroundColor = ConsoleColor.Cyan;
+                    Write(timeLeft.ToString(@"ss"));
+                    ForegroundColor = ConsoleColor.White;
+                    
+                    result = TimeSpan.Compare(timeLeft, timeNull);
+                    //Write("\n" + result);
+
+                    SetCursorPosition(4, 12);
+                    Write("»Soll ein Ton am Wecker-Ende abgespielt werden?\n" +
+                        "     Ja [ ] - Nein [ ]");
+
+                    ForegroundColor = ConsoleColor.Cyan;
+                    if (userIndex == 0)
+                    {
+                        SetCursorPosition(9, 13);
+                        Write("×");
+                        SetCursorPosition(20, 13);
+                        Write(" ");
+                    }
+                    else if (userIndex == 1)
+                    {
+                        SetCursorPosition(9, 13);
+                        Write(" ");
+                        SetCursorPosition(20, 13);
+                        Write("×");
+                    }
+                    ForegroundColor = ConsoleColor.White;
+
+                    if (KeyAvailable)
+                    {
+                        ConsoleKeyInfo keyInfo = ReadKey(true);
+                        keyPressed = keyInfo.Key;
+
+                        if (keyPressed == ConsoleKey.LeftArrow)
+                        {
+                            userIndex--;
+                            if (userIndex <= -1)
+                            {
+                                userIndex = 1;
+                            }
+                        }
+                        else if (keyPressed == ConsoleKey.RightArrow)
+                        {
+                            userIndex++;
+                            if (userIndex >= 2)
+                            {
+                                userIndex = 0;
+                            }
+                        }
+                    }
+                    System.Threading.Thread.Sleep(50);
+                }
+                while (result >= 0);
+
+                // New alarm clock or close?
             }
             while (runAlarmClock);
         }

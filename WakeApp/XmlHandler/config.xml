@@ -2,10 +2,10 @@
 <!--Auto-Gen xml file to save the last alarm clock!-->
 <root>
   <alarmclock profile="1">
-    <arrival-time type="string">8:00</arrival-time>
-    <route-duration type="string">60</route-duration>
-    <get-ready-time type="string">30</get-ready-time>
+    <arrival-time type="string">18:30</arrival-time>
+    <route-duration type="string">15</route-duration>
+    <get-ready-time type="string">5</get-ready-time>
     <other-delays type="string">0</other-delays>
-    <buffer-time type="string">5</buffer-time>
+    <buffer-time type="string">0</buffer-time>
   </alarmclock>
 </root>
