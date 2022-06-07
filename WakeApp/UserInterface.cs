@@ -12,7 +12,6 @@ namespace WakeApp
         public void Display()
         {
             HeaderV2();
-
             //Clock();
         }
 

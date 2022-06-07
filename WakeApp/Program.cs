@@ -63,8 +63,6 @@ namespace WakeApp
             // Alarm Clock
             AlarmClock AlarmClock = new AlarmClock();
             AlarmClock.Run();
-
-            ReadKey();
         }
     }
 }

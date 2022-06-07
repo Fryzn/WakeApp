@@ -19,6 +19,17 @@ namespace WakeApp
         // XDocument
         private XDocument XConfig;
 
+        private void FindHanlderDirectory()
+        {
+            foreach (string folder in Directory.GetDirectories(projectDirectory))
+            {
+                if (folder.Contains("XmlHandler"))
+                {
+                    xmlHandlerDirectory = folder;
+                }
+            }
+        }
+
         public void Check()
         {
             FindHanlderDirectory();
@@ -30,17 +41,6 @@ namespace WakeApp
             else if (File.Exists(xmlHandlerDirectory + configXml))
             {
                 configExists = true;
-            }
-        }
-
-        private void FindHanlderDirectory()
-        {
-            foreach (string folder in Directory.GetDirectories(projectDirectory))
-            {
-                if (folder.Contains("XmlHandler"))
-                {
-                    xmlHandlerDirectory = folder;
-                }
             }
         }
 

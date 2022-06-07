@@ -46,6 +46,7 @@
     <Compile Include="AlarmClock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SoundHandler\SoundHandler.cs" />
     <Compile Include="UserInterface.cs" />
     <Compile Include="XmlHandler\XmlConfig.cs" />
   </ItemGroup>
@@ -53,6 +54,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SoundHandler\alarm-clock.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="XmlHandler\config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
