@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Media;
 using static System.Console;
 
 namespace WakeApp
 {
     internal class AlarmClock : Program
     {
-        private bool newAlarmClock = false;
         private bool runAlarmClock = true;
+        private bool newAlarmClock = false;
+        private bool cancelAlarmClock = false;
+        private bool playSound = true;
 
+        private ConsoleKey keyPressed;
+        private ConsoleKeyInfo keyInfo;
         private int userIndex;
         private string userInput;
         private int currentLeftPos;
         private int currentTopPos;
-        private DateTime alarmTime;
 
+        private DateTime alarmTime;
         private double convertedTime;
         private int result;
 
@@ -35,7 +40,6 @@ namespace WakeApp
                     "     Soll der Wecker verwendet werden?\n" +
                     "     Ja [ ] - Nein [ ] (Pfeil-Tasten)\n");
 
-                ConsoleKey keyPressed;
                 userIndex = 0;
                 do
                 {
@@ -56,7 +60,7 @@ namespace WakeApp
                     }
                     ForegroundColor = ConsoleColor.White;
 
-                    ConsoleKeyInfo keyInfo = ReadKey(true);
+                    keyInfo = ReadKey(true);
                     keyPressed = keyInfo.Key;
 
                     if (keyPressed == ConsoleKey.LeftArrow)
@@ -174,7 +178,7 @@ namespace WakeApp
                     alarmTime = alarmTime.AddDays(1);
                 }
                 SetCursorPosition(4, 7);
-                Write($"»Der Wecker wurde auf {alarmTime.ToString("dd.MM.yyyy HH:mm:ss")} gesetzt.\n" +
+                Write($"»Der Wecker wurde auf {alarmTime:dd.MM.yyyy HH:mm:ss} gesetzt.\n" +
                     $"     Wecker klingelt in:\n" +
                     $"\n" +
                     $"                     »             «");
@@ -182,7 +186,8 @@ namespace WakeApp
                 // Check how much time is left 
                 TimeSpan timeLeft;
                 TimeSpan timeNull = new TimeSpan(0, 0, 0);
-                ConsoleKey keyPressed;
+
+                cancelAlarmClock = false;
                 userIndex = 0;
                 do
                 {
@@ -205,7 +210,6 @@ namespace WakeApp
                     ForegroundColor = ConsoleColor.White;
                     
                     result = TimeSpan.Compare(timeLeft, timeNull);
-                    //Write("\n" + result);
 
                     SetCursorPosition(4, 12);
                     Write("»Soll ein Ton am Wecker-Ende abgespielt werden?\n" +
@@ -218,6 +222,8 @@ namespace WakeApp
                         Write("×");
                         SetCursorPosition(20, 13);
                         Write(" ");
+                        playSound = true;
+                        
                     }
                     else if (userIndex == 1)
                     {
@@ -225,12 +231,13 @@ namespace WakeApp
                         Write(" ");
                         SetCursorPosition(20, 13);
                         Write("×");
+                        playSound = false;
                     }
                     ForegroundColor = ConsoleColor.White;
 
                     if (KeyAvailable)
                     {
-                        ConsoleKeyInfo keyInfo = ReadKey(true);
+                        keyInfo = ReadKey(true);
                         keyPressed = keyInfo.Key;
 
                         if (keyPressed == ConsoleKey.LeftArrow)
@@ -249,12 +256,101 @@ namespace WakeApp
                                 userIndex = 0;
                             }
                         }
+                        else if (keyPressed == ConsoleKey.Escape)
+                        {
+                            cancelAlarmClock = true;
+                            newAlarmClock = true;
+                            break;
+                        }
                     }
                     System.Threading.Thread.Sleep(50);
                 }
                 while (result >= 0);
 
-                // New alarm clock or close?
+                // SoundPlayer and new alarm clock query
+                if (!cancelAlarmClock)
+                {
+                    if (playSound)
+                    {
+                        SoundHandler Sound = new SoundHandler();
+                        SoundPlayer Alarm = Sound.Run();
+
+                        SetCursorPosition(4, 12);
+                        Write("»Die Zeit wurde erreicht...                      \n" +
+                            "     Drücken Sie [Enter] um den Alarm auszuschalten.");
+
+                        do
+                        {
+                            keyInfo = ReadKey(true);
+                            keyPressed = keyInfo.Key;
+                        }
+                        while (keyPressed != ConsoleKey.Enter);
+                        Alarm.Stop();
+                    }
+                    else
+                    {
+                        SetCursorPosition(4, 12);
+                        Write("»Die Zeit wurde erreicht...                      \n" +
+                            "     Drücken Sie [Enter] um fortzufahren.");
+                        do
+                        {
+                            keyInfo = ReadKey(true);
+                            keyPressed = keyInfo.Key;
+                        }
+                        while (keyPressed != ConsoleKey.Enter);
+                    }
+                }
+
+                Clear();
+                UI.Display();
+                SetCursorPosition(4, 7);
+                Write("»Möchten Sie einen neuen Wecker starten?\n" +
+                    "     Ja [ ] - Nein [ ] (Pfeil-Tasten)");
+                
+                userIndex = 0;
+                do
+                {
+                    ForegroundColor = ConsoleColor.Cyan;
+                    if (userIndex == 0)
+                    {
+                        SetCursorPosition(9, 8);
+                        Write("×");
+                        SetCursorPosition(20, 8);
+                        Write(" ");
+                        newAlarmClock = true;
+                    }
+                    else if (userIndex == 1)
+                    {
+                        SetCursorPosition(9, 8);
+                        Write(" ");
+                        SetCursorPosition(20, 8);
+                        Write("×");
+                        newAlarmClock = false;
+                        runAlarmClock = false;
+                    }
+                    ForegroundColor = ConsoleColor.White;
+
+                    keyInfo = ReadKey(true);
+                    keyPressed = keyInfo.Key;
+
+                    if (keyPressed == ConsoleKey.LeftArrow)
+                    {
+                        userIndex--;
+                        if (userIndex <= -1)
+                        {
+                            userIndex = 1;
+                        }
+                    }
+                    else if (keyPressed == ConsoleKey.RightArrow)
+                    {
+                        userIndex++;
+                        if (userIndex >= 2)
+                        {
+                            userIndex = 0;
+                        }
+                    }
+                }
+                while (keyPressed != ConsoleKey.Enter);
             }
             while (runAlarmClock);
         }
@@ -268,7 +364,6 @@ namespace WakeApp
                 currentLeftPos = CursorLeft;
                 currentTopPos = CursorTop;
 
-                ConsoleKey keyPressed;
                 do
                 {
                     SetCursorPosition(currentLeftPos, currentTopPos);
@@ -276,7 +371,7 @@ namespace WakeApp
                     Write(userInput);
                     ForegroundColor = ConsoleColor.White;
 
-                    ConsoleKeyInfo keyInfo = ReadKey(true);
+                    keyInfo = ReadKey(true);
                     keyPressed = keyInfo.Key;
 
                     if (keyPressed == ConsoleKey.D0 | keyPressed == ConsoleKey.D1 | keyPressed == ConsoleKey.D2 | keyPressed == ConsoleKey.D3 | keyPressed == ConsoleKey.D4 |
@@ -327,7 +422,6 @@ namespace WakeApp
                 currentLeftPos = CursorLeft;
                 currentTopPos = CursorTop;
 
-                ConsoleKey keyPressed;
                 do
                 {
                     SetCursorPosition(currentLeftPos, currentTopPos);
@@ -335,7 +429,7 @@ namespace WakeApp
                     Write(userInput);
                     ForegroundColor = ConsoleColor.White;
 
-                    ConsoleKeyInfo keyInfo = ReadKey(true);
+                    keyInfo = ReadKey(true);
                     keyPressed = keyInfo.Key;
 
                     if (keyPressed == ConsoleKey.D0 | keyPressed == ConsoleKey.D1 | keyPressed == ConsoleKey.D2 | keyPressed == ConsoleKey.D3 | keyPressed == ConsoleKey.D4 |
@@ -382,7 +476,6 @@ namespace WakeApp
         private bool SetBufferTime()
         {
             userIndex = 0;
-            ConsoleKey keyPressed;
             do
             {
                 ForegroundColor = ConsoleColor.Cyan;
@@ -415,7 +508,7 @@ namespace WakeApp
                 }
                 ForegroundColor = ConsoleColor.White;
 
-                ConsoleKeyInfo keyInfo = ReadKey(true);
+                keyInfo = ReadKey(true);
                 keyPressed = keyInfo.Key;
 
                 if (keyPressed == ConsoleKey.LeftArrow)
