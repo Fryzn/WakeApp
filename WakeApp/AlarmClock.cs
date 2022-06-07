@@ -213,7 +213,7 @@ namespace WakeApp
 
                     SetCursorPosition(4, 12);
                     Write("»Soll ein Ton am Wecker-Ende abgespielt werden?\n" +
-                        "     Ja [ ] - Nein [ ]");
+                        "     Ja [ ] - Nein [ ] (Pfeil-Tasten)");
 
                     ForegroundColor = ConsoleColor.Cyan;
                     if (userIndex == 0)
