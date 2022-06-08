@@ -14,3 +14,10 @@ Entwickeln Sie für das KBB die Wake-App, wobei Sie folgende Mindestanforderunge
   * Testen Sie Ihr Programm mit unterschiedlichen Daten.
 * Speichern Sie die eingegebenen Daten in einer Datenbank oder Datei, sodass diese App beim nächsten Start des Programms wieder zur Verfügung stehen.
 * Verwenden Sie das Versionskontrollsystem GIT.
+
+## Klassendiagramm
+![Klassendiagramm](https://user-images.githubusercontent.com/88037595/172706721-48fd7d5d-feb8-45c5-82f7-4fe1a57cfe82.png)
+
+### Autoren
+* Elias S.
+* Jonas F.
